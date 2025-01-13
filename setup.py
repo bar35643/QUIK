@@ -7,8 +7,8 @@ import sys
 import sysconfig
 
 from setuptools import setup
+from setuptools import setup, find_packages
 import subprocess
-
 try:
     from pybind11.setup_helpers import Pybind11Extension as Extension
     from pybind11.setup_helpers import build_ext
@@ -85,6 +85,12 @@ class cmake_build_ext(build_ext):
 
         try:
             os.chdir(build_temp)
+            print("")
+            print(build_temp)
+            print(ext.source_dir)
+            print(cmake_args)
+            print(build_args)
+            print("")
             
             retcode = subprocess.call([cmake, ext.source_dir, *cmake_args])
             if retcode != 0:
@@ -135,6 +141,7 @@ try:
     setup(
         name='quik',
         version=version.__version__,
+        packages=find_packages(exclude=("include", "src", "test")),
         **ext_kwargs,
     )
 finally:
